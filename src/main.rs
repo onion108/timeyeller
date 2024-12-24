@@ -59,16 +59,22 @@ fn main() {
     model.set_speaker(0);
     let synth = PiperSpeechSynthesizer::new(model).unwrap();
 
+    let mut yelled = false;
+
     loop {
         let now = chrono::offset::Local::now().time();
-        match now.minute() {
-            0 => {
+        match (now.minute(), yelled) {
+            (0, false) => {
                 play_the_fucking_sound(&synth);
+                yelled = true;
             }
-            30 => {
+            (30, false) => {
                 play_the_fucking_sound(&synth);
+                yelled = true;
             }
-            _ => {}
+            _ => {
+                yelled = false;
+            }
         }
     }
 }
