@@ -86,16 +86,11 @@ fn main() {
     loop {
         let now = chrono::offset::Local::now().time();
         match (now.minute(), yelled) {
-            (0, false) => {
+            (0 | 30, false) => {
                 play_the_fucking_sound(&synth);
                 yelled = true;
             }
-            (30, false) => {
-                play_the_fucking_sound(&synth);
-                yelled = true;
-            }
-            (0, true) => {},
-            (30, true) => {},
+            (0 | 30, true) => {},
             (_, true) => {
                 yelled = false;
             }
