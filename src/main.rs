@@ -4,7 +4,6 @@ use chrono::Timelike;
 use piper_rs::synth::PiperSpeechSynthesizer;
 use rodio::{buffer::SamplesBuffer, Decoder, OutputStream, Sink};
 
-
 static ALARM_WAV: &'static [u8] = include_bytes!("../resources/alarm.wav");
 
 fn find_resource(path: &str) -> String {
@@ -95,6 +94,8 @@ fn main() {
                 play_the_fucking_sound(&synth);
                 yelled = true;
             }
+            (0, true) => {},
+            (30, true) => {},
             (_, true) => {
                 yelled = false;
             }
