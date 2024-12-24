@@ -95,9 +95,10 @@ fn main() {
                 play_the_fucking_sound(&synth);
                 yelled = true;
             }
-            _ => {
+            (_, true) => {
                 yelled = false;
             }
+            _ => {}
         }
     }
 }
