@@ -54,6 +54,29 @@ fn play_the_fucking_sound(synth: &PiperSpeechSynthesizer) {
 }
 
 fn main() {
+    std::panic::set_hook(Box::new(|info| {
+        if let Some(loc) = info.location() {
+            eprint!("OH, NO! (`д` ) {}:{}:{}: ", loc.file(), loc.line(), loc.column());
+        } else {
+            eprint!("OH, NO! (`д` ) (And we don't even now where exactly the position is, too bad!): ");
+        }
+
+        if let Some(str) = info.payload().downcast_ref::<String>() {
+            eprint!("{}", str);
+        } else if let Some(str) = info.payload().downcast_ref::<&str>() {
+            eprint!("{}", str);
+        } else {
+            eprint!("<SOME STRANGE PANIC PAYLOAD THAT WE DON'T UNDERSTAND LOL>");
+        }
+
+        #[cfg(debug_assertions)]
+        if let Some(loc) = info.location() {
+            eprintln!("vim {} \"+call cursor({}, {})\"", loc.file(), loc.line(), loc.column());
+        }
+
+        eprintln!();
+    }));
+
     let path = find_resource("zh_CN-huayan-medium.onnx.json");
     let model = piper_rs::from_config_path(&Path::new(&path)).expect("sorry i don't know how to speak human language bro");
     model.set_speaker(0);
